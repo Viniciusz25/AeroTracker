@@ -8,11 +8,28 @@ export interface LaunchCardProps {
   className?: string;
 }
 
+const formatStr = (val: any, fallback = 'N/A'): string => {
+  if (val === null || val === undefined) return fallback;
+  if (typeof val === 'string') return val;
+  if (typeof val === 'number') return String(val);
+  if (typeof val === 'object') {
+    return val.name || val.abbrev || val.description || fallback;
+  }
+  return String(val);
+};
+
 export const LaunchCard: FC<LaunchCardProps> = ({ launch, className = '' }) => {
   const [countdown, setCountdown] = useState<string>('T-00:00:00');
 
+  const providerName = formatStr(launch.provider, 'SpaceX');
+  const launchName = formatStr(launch.name, 'Space Mission');
+  const vehicleName = formatStr(launch.vehicle, 'Rocket');
+  const padName = formatStr(launch.pad, 'Launch Complex');
+  const statusName = formatStr(launch.status, 'Go');
+
   useEffect(() => {
     const updateCountdown = () => {
+      if (!launch.net) return;
       const target = new Date(launch.net).getTime();
       const now = new Date().getTime();
       const diff = target - now;
@@ -48,24 +65,24 @@ export const LaunchCard: FC<LaunchCardProps> = ({ launch, className = '' }) => {
               <Rocket size={18} />
             </div>
             <div>
-              <span className="text-[10px] font-mono text-[#5A6475] uppercase">{launch.provider}</span>
-              <h3 className="font-['Outfit'] font-bold text-base text-white tracking-wide">{launch.name}</h3>
+              <span className="text-[10px] font-mono text-[#5A6475] uppercase">{providerName}</span>
+              <h3 className="font-['Outfit'] font-bold text-base text-white tracking-wide">{launchName}</h3>
             </div>
           </div>
-          <StatusBadge status={launch.status === 'Go' ? 'online' : 'warning'} customLabel={launch.status || 'GO'} />
+          <StatusBadge status={statusName.toLowerCase().includes('go') ? 'online' : 'warning'} customLabel={statusName} />
         </div>
 
         {/* Mission details */}
         <div className="space-y-2 text-xs font-mono">
           <div className="flex items-center justify-between">
             <span className="text-[#5A6475]">VEHICLE:</span>
-            <span className="text-white font-semibold">{launch.vehicle}</span>
+            <span className="text-white font-semibold">{vehicleName}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-[#5A6475]">LOCATION:</span>
-            <span className="text-[#B0BAC8] truncate max-w-[180px]">{launch.pad}</span>
+            <span className="text-[#B0BAC8] truncate max-w-[180px]">{padName}</span>
           </div>
-          {launch.probability_pct && (
+          {typeof launch.probability_pct === 'number' && (
             <div className="flex items-center justify-between">
               <span className="text-[#5A6475]">WEATHER GO:</span>
               <span className="text-[#47F3A0] font-bold">{launch.probability_pct}%</span>
