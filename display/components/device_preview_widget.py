@@ -13,7 +13,7 @@ from display.theme import Theme
 
 class DeviceCircleDisplay(QWidget):
     """
-    Mostrador gráfico circular de 466x466 AMOLED simulando o visor do ESP32-S3.
+    Mostrador gráfico circular de 466x466 AMOLED simulando o visor do ESP32-S3 em tempo real.
     """
 
     def __init__(self, parent=None) -> None:
@@ -31,6 +31,15 @@ class DeviceCircleDisplay(QWidget):
         self.dist_to = "9107 km"
         self.duration_str = "11h 00m"
         self.eta_str = "13:00"
+        self.progress_pct = 15
+
+    def set_realtime_data(self, flight_number: str, dist_from: str, dist_to: str, progress_pct: int) -> None:
+        """Atualiza a telemetria em tempo real no visor circular."""
+        self.flight_number = flight_number
+        self.dist_from = dist_from
+        self.dist_to = dist_to
+        self.progress_pct = progress_pct
+        self.update()
 
     def paintEvent(self, event) -> None:
         painter = QPainter(self)
@@ -101,10 +110,13 @@ class DeviceCircleDisplay(QWidget):
         painter.setBrush(Qt.BrushStyle.NoBrush)
         painter.drawPath(arc_path)
 
-        # Ícone de Aeronave Verde em ICN
+        # Posição Dinâmica da Aeronave ao Longo da Rota Real-Time
+        t = max(0.0, min(1.0, self.progress_pct / 100.0))
+        plane_pos = arc_path.pointAtPercent(t)
+
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(QBrush(QColor(Theme.Colors.PRIMARY)))
-        painter.drawEllipse(QPointF(arc_x1, arc_y1), 5, 5)
+        painter.drawEllipse(plane_pos, 5, 5)
 
         # Rótulos ICN e SFO
         painter.setFont(QFont("Segoe UI", 10, QFont.Weight.Bold))
@@ -117,7 +129,7 @@ class DeviceCircleDisplay(QWidget):
         painter.drawText(QRectF(arc_x1 - 40, arc_y1 + 4, 40, 14), Qt.AlignmentFlag.AlignCenter, self.origin_city)
         painter.drawText(QRectF(arc_x2 + 2, arc_y2 + 4, 55, 14), Qt.AlignmentFlag.AlignCenter, self.dest_city)
 
-        # 6. Painel de Métricas Inferiores no Visor (Telemetria)
+        # 6. Painel de Métricas Inferiores no Visor (Telemetria Real-Time)
         bot_y = center_y + 35
         painter.setFont(QFont("Segoe UI", 7))
         painter.setPen(QPen(QColor(Theme.Colors.TEXT_MUTED)))

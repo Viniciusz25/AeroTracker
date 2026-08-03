@@ -1,11 +1,11 @@
 """
 AeroTracker Core — Tracker View (MVC)
 =====================================
-View pura do módulo Tracker (Airspace Companion UI).
+View pura do módulo Tracker (Airspace Companion UI com animação em tempo real).
 """
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QLineEdit, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QLineEdit, QProgressBar, QVBoxLayout, QWidget
 
 from display.components.animated_card import GlassPanel
 from display.components.primary_button import GlassButton
@@ -189,7 +189,7 @@ class TrackerView(QWidget):
         self.l_fn = QLabel(f"{self.model.active_flight}  ACTIVE")
         self.l_fn.setFont(Theme.Fonts.body_bold())
         self.l_fn.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
-        self.l_date = QLabel(f"Sat, Aug 1, 2026")
+        self.l_date = QLabel("Sat, Aug 1, 2026")
         self.l_date.setFont(Theme.Fonts.caption())
         self.l_date.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
         fn_box.addWidget(self.l_fn)
@@ -200,7 +200,7 @@ class TrackerView(QWidget):
 
         info_box = QVBoxLayout()
         info_box.setSpacing(2)
-        self.l_info1 = QLabel(f"Scheduled · 0% · ETA {self.model.eta}")
+        self.l_info1 = QLabel(f"{self.model.status_str} · ETA {self.model.eta}")
         self.l_info1.setFont(Theme.Fonts.caption())
         self.l_info1.setStyleSheet(f"color: {Theme.Colors.TEXT_SECONDARY}; border: none;")
         l_info2 = QLabel("Scheduled 02:00")
@@ -271,11 +271,24 @@ class TrackerView(QWidget):
 
         c3.main_layout.addLayout(route_row)
 
-        # Progress Line
-        line = QFrame()
-        line.setFrameShape(QFrame.Shape.HLine)
-        line.setStyleSheet(f"background-color: {Theme.Colors.BORDER}; min-height: 1px; max-height: 1px; border: none;")
-        c3.main_layout.addWidget(line)
+        # Barra de Progresso Real-time
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setRange(0, 100)
+        self.progress_bar.setValue(self.model.progress_pct)
+        self.progress_bar.setTextVisible(False)
+        self.progress_bar.setStyleSheet(f"""
+            QProgressBar {{
+                background-color: {Theme.Colors.BORDER};
+                border: none;
+                height: 3px;
+                border-radius: 1px;
+            }}
+            QProgressBar::chunk {{
+                background-color: {Theme.Colors.PRIMARY};
+                border-radius: 1px;
+            }}
+        """)
+        c3.main_layout.addWidget(self.progress_bar)
 
         # Telemetry metrics row
         metrics_row = QHBoxLayout()
@@ -313,16 +326,16 @@ class TrackerView(QWidget):
         l_m3_tag = QLabel("DISTANCE")
         l_m3_tag.setFont(Theme.Fonts.caption())
         l_m3_tag.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none; font-size: 8px; letter-spacing: 1px;")
-        l_m3_val = QLabel(self.model.distance)
-        l_m3_val.setFont(Theme.Fonts.body_bold())
-        l_m3_val.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY}; border: none;")
+        self.l_m3_val = QLabel(f"{self.model.dist_from_str} / {self.model.distance}")
+        self.l_m3_val.setFont(Theme.Fonts.body_bold())
+        self.l_m3_val.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY}; border: none;")
         m3.addWidget(l_m3_tag)
-        m3.addWidget(l_m3_val)
+        m3.addWidget(self.l_m3_val)
         metrics_row.addLayout(m3)
 
         c3.main_layout.addLayout(metrics_row)
 
-        self.l_c3_sub = QLabel(f"Scheduled · 0% · ETA {self.model.eta} · AirLabs fallback")
+        self.l_c3_sub = QLabel(f"{self.model.status_str} · ETA {self.model.eta} · Live Radar Active")
         self.l_c3_sub.setFont(Theme.Fonts.caption())
         self.l_c3_sub.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none; font-size: 9px;")
         c3.main_layout.addWidget(self.l_c3_sub)
@@ -341,5 +354,7 @@ class TrackerView(QWidget):
         flight = self.model.active_flight
         self.l_fn.setText(f"{flight}  ACTIVE")
         self.l_center_plane.setText(f"✈  {flight}")
-        self.l_info1.setText(f"Scheduled · 0% · ETA {self.model.eta}")
-        self.l_c3_sub.setText(f"Scheduled · 0% · ETA {self.model.eta} · AirLabs fallback")
+        self.l_info1.setText(f"{self.model.status_str} · ETA {self.model.eta}")
+        self.l_c3_sub.setText(f"{self.model.status_str} · ETA {self.model.eta} · Live Radar Active")
+        self.progress_bar.setValue(self.model.progress_pct)
+        self.l_m3_val.setText(f"{self.model.dist_from_str} / {self.model.distance}")

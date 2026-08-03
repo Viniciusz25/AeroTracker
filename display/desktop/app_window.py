@@ -177,6 +177,16 @@ class MainWindow(QMainWindow):
         self.device_twin_panel = DevicePreviewPanel(self)
         self.main_layout.addWidget(self.device_twin_panel)
 
+        # Conecta sinal de telemetria em tempo real do Tracker ao mostrador do ESP32
+        self.tracker_m.data_changed.connect(
+            lambda: self.device_twin_panel.circle_display.set_realtime_data(
+                self.tracker_m.active_flight,
+                self.tracker_m.dist_from_str,
+                self.tracker_m.dist_to_str,
+                self.tracker_m.progress_pct,
+            )
+        )
+
     def _init_screens(self) -> None:
         """Instancia os módulos e constrói o menu de navegação da Sidebar."""
         nav_items = [
@@ -199,9 +209,9 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(r_view)
 
         # 1. Tracker (Voo em tempo real Airspace Companion)
-        tracker_m = TrackerModel()
-        self.tracker_c = TrackerController(tracker_m)
-        self.stack.addWidget(TrackerView(tracker_m))
+        self.tracker_m = TrackerModel()
+        self.tracker_c = TrackerController(self.tracker_m)
+        self.stack.addWidget(TrackerView(self.tracker_m))
 
         # 2. Weather
         wx_m = WeatherModel()
