@@ -1,7 +1,7 @@
 """
-Testes — Display Layer (Glass Cockpit Engine)
-==============================================
-Testa a integridade de instanciação das 11 telas independentes MVC na MainWindow.
+Testes — Display Layer (Airspace Companion UI)
+================================================
+Testa a integridade de instanciação das 3 áreas na MainWindow e dos módulos MVC.
 """
 
 import sys
@@ -22,9 +22,10 @@ def qapp():
 class TestDesktopUI:
     def test_main_window_instantiation(self, qapp) -> None:
         """
-        Valida a instanciação da MainWindow e das 11 telas independentes MVC.
+        Valida a instanciação da MainWindow e das 3 áreas do layout (Sidebar, Workspace, Device Digital Twin).
         """
         window = MainWindow()
-        assert window.windowTitle() == "AeroTracker Core — Avionics Glass Cockpit & Control Station"
-        assert window.stack.count() == 11
+        assert window.windowTitle() == "AeroTracker Core — Airspace Instrument & Control Station"
+        assert window.stack.count() == 9
+        assert window.device_twin_panel is not None
         window.close()
