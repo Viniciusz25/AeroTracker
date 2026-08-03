@@ -365,10 +365,10 @@ class Launch(AeroBaseModel):
             pad=pad,
             orbit=orbit,
             mission_description=mission_desc,
-            image_url=data.get("image"),
-            webcast_url=data.get("webcast_live"),
-            probability=data.get("probability"),
-            hold_reason=data.get("holdreason") or None,
+            image_url=data.get("image") if isinstance(data.get("image"), str) else None,
+            webcast_url=data.get("webcast_live") if isinstance(data.get("webcast_live"), str) else (data.get("vidURL") if isinstance(data.get("vidURL"), str) else None),
+            probability=float(data.get("probability")) if isinstance(data.get("probability"), (int, float)) else None,
+            hold_reason=data.get("holdreason") if isinstance(data.get("holdreason"), str) else None,
         )
 
 
