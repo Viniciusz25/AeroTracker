@@ -10,8 +10,9 @@ export function useWebSocket<T = unknown>(
 
   useEffect(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    // Use proxy relative host or fallback to port 8001
-    const host = window.location.port === '5173' ? 'localhost:8001' : window.location.host;
+    // Always target FastAPI backend on port 8001 when running dev servers
+    const isDev = window.location.port !== '' && window.location.port !== '8001';
+    const host = isDev ? 'localhost:8001' : window.location.host;
     const wsUrl = `${protocol}//${host}/api/v1/ws/${channel}`;
 
     const ws = new WebSocket(wsUrl);

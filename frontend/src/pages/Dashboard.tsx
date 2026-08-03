@@ -36,6 +36,11 @@ export const DashboardPage: FC = () => {
     mission_type: 'Communications',
   };
 
+  const tempVal =
+    typeof currentWeather?.temperature_c === 'number'
+      ? `${currentWeather.temperature_c.toFixed(1)}°C`
+      : '--';
+
   return (
     <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
       {/* Top 4 KPI Metrics Grid */}
@@ -49,14 +54,14 @@ export const DashboardPage: FC = () => {
         />
         <MetricCard
           label="Local Temperature"
-          value={currentWeather ? `${currentWeather.temperature_c.toFixed(1)}°C` : '--'}
+          value={tempVal}
           unit={currentWeather?.flight_category || 'VFR'}
           icon={Cloud}
           variant="secondary"
         />
         <MetricCard
           label="ISS Altitude"
-          value={issPosition ? `${Math.round(issPosition.altitude_km)}` : '420'}
+          value={typeof issPosition?.altitude_km === 'number' ? `${Math.round(issPosition.altitude_km)}` : '420'}
           unit="km"
           icon={Satellite}
           variant="attention"

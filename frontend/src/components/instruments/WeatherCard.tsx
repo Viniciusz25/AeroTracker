@@ -18,6 +18,14 @@ export const WeatherCard: FC<WeatherCardProps> = ({ weather, className = '' }) =
     );
   }
 
+  const tempDisplay = typeof weather.temperature_c === 'number' ? weather.temperature_c.toFixed(1) : '--';
+  const feelsDisplay = typeof weather.feels_like_c === 'number' ? weather.feels_like_c.toFixed(1) : '--';
+  const windSpeedDisplay = typeof weather.wind_speed_ms === 'number' ? weather.wind_speed_ms.toFixed(1) : '0';
+  const windDirDisplay = weather.wind_direction_deg ?? 0;
+  const pressureDisplay = weather.pressure_hpa ?? 1013;
+  const humidityDisplay = weather.humidity_pct ?? 0;
+  const visDisplay = typeof weather.visibility_m === 'number' ? (weather.visibility_m / 1000).toFixed(1) : '--';
+
   return (
     <div className={`bg-[#131720] border border-[#1A1F2B] rounded-2xl p-5 shadow-2xl backdrop-blur-md ${className}`}>
       {/* Header */}
@@ -27,8 +35,8 @@ export const WeatherCard: FC<WeatherCardProps> = ({ weather, className = '' }) =
             <Cloud size={20} />
           </div>
           <div>
-            <h3 className="font-['Outfit'] font-bold text-base text-white">{weather.location}</h3>
-            <p className="text-xs font-mono text-[#5A6475]">{weather.condition}</p>
+            <h3 className="font-['Outfit'] font-bold text-base text-white">{weather.location || 'Station SBGR'}</h3>
+            <p className="text-xs font-mono text-[#5A6475]">{weather.condition || 'Operational'}</p>
           </div>
         </div>
         <StatusBadge status={weather.flight_category === 'IFR' ? 'ifr' : 'vfr'} customLabel={weather.flight_category || 'VFR'} />
@@ -37,20 +45,20 @@ export const WeatherCard: FC<WeatherCardProps> = ({ weather, className = '' }) =
       {/* Temperature & Feels Like */}
       <div className="flex items-baseline gap-3 mb-4">
         <span className="font-['Outfit'] font-bold text-4xl text-white">
-          {weather.temperature_c.toFixed(1)}°C
+          {tempDisplay}°C
         </span>
         <span className="text-xs font-mono text-[#B0BAC8]">
-          FEELS LIKE <strong className="text-white">{weather.feels_like_c.toFixed(1)}°C</strong>
+          FEELS LIKE <strong className="text-white">{feelsDisplay}°C</strong>
         </span>
       </div>
 
       {/* Data Rows */}
       <div className="space-y-1">
-        <DataRow label="WIND SPEED" value={weather.wind_speed_ms.toFixed(1)} unit="m/s" />
-        <DataRow label="WIND DIRECTION" value={`${weather.wind_direction_deg}°`} />
-        <DataRow label="ATMOSPHERIC PRESSURE" value={weather.pressure_hpa} unit="hPa" />
-        <DataRow label="RELATIVE HUMIDITY" value={`${weather.humidity_pct}%`} />
-        <DataRow label="VISIBILITY" value={(weather.visibility_m / 1000).toFixed(1)} unit="km" />
+        <DataRow label="WIND SPEED" value={windSpeedDisplay} unit="m/s" />
+        <DataRow label="WIND DIRECTION" value={`${windDirDisplay}°`} />
+        <DataRow label="ATMOSPHERIC PRESSURE" value={pressureDisplay} unit="hPa" />
+        <DataRow label="RELATIVE HUMIDITY" value={`${humidityDisplay}%`} />
+        <DataRow label="VISIBILITY" value={visDisplay} unit="km" />
       </div>
 
       {/* Raw METAR Bar */}
