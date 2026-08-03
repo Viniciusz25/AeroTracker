@@ -6,7 +6,7 @@ e Garmin G1000 Navigation Display.
 """
 
 import math
-from PySide6.QtCore import QEasingCurve, QPropertyAnimation, QRectF, Qt, Property
+from PySide6.QtCore import QEasingCurve, QPointF, QPropertyAnimation, QRectF, Qt, Property
 from PySide6.QtGui import QBrush, QColor, QFont, QPainter, QPen, QPolygonF
 from PySide6.QtWidgets import QGraphicsEllipseItem, QGraphicsLineItem, QGraphicsPolygonItem, QGraphicsScene, QGraphicsTextItem, QGraphicsView
 
