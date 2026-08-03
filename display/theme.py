@@ -20,8 +20,9 @@ class Theme:
         BG_DARK = "#050608"          # Preto profundo
         BG_SIDEBAR = "#080A0E"       # Sidebar lateral
         BG_PANEL = "#101214"         # Painéis secundários
-        BG_CARD = "#15181C"          # Fundo de cartões
-        BG_CARD_HOVER = "#1C2026"    # Highlight sutil
+        BG_CARD = "#14171C"          # Fundo de cartões
+        BG_CARD_HOVER = "#1A1E25"    # Highlight sutil
+        BG_INPUT = "#0B0E12"         # Fundo de entradas de texto
 
         # Acentos de Marca
         PRIMARY = "#47F3A0"         # Verde Menta Vibrante
@@ -33,7 +34,7 @@ class Theme:
 
         # Status Semânticos
         POSITIVE = "#47F3A0"        # Verde (Em voo, OK, Ativo)
-        POSITIVE_BG = "#0A2016"
+        POSITIVE_BG = "#0E2618"
         ATTENTION = "#FFC857"       # Âmbar (Atenção, Solo, Standby)
         ATTENTION_BG = "#261E0A"
         ALERT = "#FF5D5D"           # Vermelho (Emergência, Alerta)
@@ -46,10 +47,10 @@ class Theme:
 
         # Tipografia
         WHITE = "#FFFFFF"
-        SUBTITLE = "#A9B0B8"
+        SUBTITLE = "#9BA4B0"
         TEXT_PRIMARY = "#FFFFFF"     # Branco puro
-        TEXT_SECONDARY = "#A9B0B8"   # Subtítulos e dados secundários
-        TEXT_MUTED = "#64748B"       # Legendas discretas
+        TEXT_SECONDARY = "#9BA4B0"   # Subtítulos e dados secundários
+        TEXT_MUTED = "#5A6472"       # Legendas discretas
 
         @classmethod
         def qcolor(cls, hex_code: str) -> QColor:
@@ -71,7 +72,7 @@ class Theme:
 
         @classmethod
         def title_section(cls) -> QFont:
-            return QFont(cls.FONT_FAMILY, 14, QFont.Weight.Bold)
+            return QFont(cls.FONT_FAMILY, 13, QFont.Weight.Bold)
 
         @classmethod
         def section_header(cls) -> QFont:
@@ -83,7 +84,7 @@ class Theme:
 
         @classmethod
         def metric_huge(cls) -> QFont:
-            return QFont(cls.FONT_MONO, 22, QFont.Weight.Bold)
+            return QFont(cls.FONT_FAMILY, 24, QFont.Weight.Bold)
 
         @classmethod
         def metric_large(cls) -> QFont:
@@ -144,12 +145,12 @@ class Theme:
                     border-radius: 3px;
                 }}
                 QLineEdit {{
-                    background-color: {Theme.Colors.BG_PANEL};
+                    background-color: {Theme.Colors.BG_INPUT};
+                    color: {Theme.Colors.TEXT_PRIMARY};
                     border: 1px solid {Theme.Colors.BORDER};
                     border-radius: {Theme.Dimensions.RADIUS_S}px;
-                    padding: 6px 12px;
-                    color: {Theme.Colors.TEXT_PRIMARY};
-                    font-family: "{Theme.Fonts.FONT_MONO}";
+                    padding: 6px 10px;
+                    font-size: 11px;
                 }}
                 QLineEdit:focus {{
                     border: 1px solid {Theme.Colors.PRIMARY};

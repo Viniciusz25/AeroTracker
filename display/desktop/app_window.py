@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
         # ÁREA 1: SIDEBAR (Esquerda)
         # =====================================================================
         self.sidebar_frame = QFrame(self)
-        self.sidebar_frame.setFixedWidth(200)
+        self.sidebar_frame.setFixedWidth(190)
         self.sidebar_frame.setStyleSheet(f"""
             QFrame {{
                 background-color: {Theme.Colors.BG_SIDEBAR};
@@ -86,7 +86,7 @@ class MainWindow(QMainWindow):
 
         lbl_logo_sub = QLabel("AIRSPACE INSTRUMENT")
         lbl_logo_sub.setFont(Theme.Fonts.caption())
-        lbl_logo_sub.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        lbl_logo_sub.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none; font-size: 7px; letter-spacing: 1px;")
 
         logo_text_box.addWidget(lbl_logo_main)
         logo_text_box.addWidget(lbl_logo_sub)
@@ -108,8 +108,34 @@ class MainWindow(QMainWindow):
 
         self.sidebar_layout.addWidget(self.side_scroll)
 
-        # Rodapé da Sidebar: Status do Hardware ESP32-S3
         self.sidebar_layout.addStretch()
+
+        # Botões Circulares Utilitários (Chave 🔑 e Grid ⁝⁝)
+        util_box = QHBoxLayout()
+        util_box.setSpacing(Theme.Dimensions.PAD_S)
+        btn_key = QLabel("🔑")
+        btn_key.setStyleSheet(f"""
+            background-color: {Theme.Colors.BG_CARD};
+            color: {Theme.Colors.TEXT_MUTED};
+            border: 1px solid {Theme.Colors.BORDER};
+            border-radius: 15px;
+            padding: 6px;
+        """)
+        btn_grid = QLabel("⁝⁝")
+        btn_grid.setStyleSheet(f"""
+            background-color: {Theme.Colors.BG_CARD};
+            color: {Theme.Colors.TEXT_MUTED};
+            border: 1px solid {Theme.Colors.BORDER};
+            border-radius: 15px;
+            padding: 6px;
+        """)
+        util_box.addWidget(btn_key)
+        util_box.addWidget(btn_grid)
+        util_box.addStretch()
+        self.sidebar_layout.addLayout(util_box)
+        self.sidebar_layout.addSpacing(Theme.Dimensions.PAD_S)
+
+        # Rodapé da Sidebar: Status do Hardware ESP32-S3
         esp_badge = QFrame()
         esp_badge.setStyleSheet(f"""
             QFrame {{
@@ -124,10 +150,10 @@ class MainWindow(QMainWindow):
 
         l_esp1 = QLabel("🟢 ESP32-S3")
         l_esp1.setFont(Theme.Fonts.body_bold())
-        l_esp1.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
+        l_esp1.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none; font-size: 10px;")
         l_esp2 = QLabel("466 × 466 AMOLED")
         l_esp2.setFont(Theme.Fonts.caption())
-        l_esp2.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        l_esp2.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none; font-size: 8px;")
 
         esp_layout.addWidget(l_esp1)
         esp_layout.addWidget(l_esp2)
@@ -228,6 +254,7 @@ class MainWindow(QMainWindow):
             self.nav_buttons.append(btn)
 
         self.side_menu_layout.addStretch()
+        self._select_nav(1)
 
     def _select_nav(self, index: int) -> None:
         """Altera a tela ativa no QStackedWidget e atualiza o estilo dos botões."""
@@ -237,10 +264,11 @@ class MainWindow(QMainWindow):
                 btn.setStyleSheet(f"""
                     QPushButton {{
                         background-color: {Theme.Colors.POSITIVE_BG};
-                        color: {Theme.Colors.PRIMARY};
+                        color: {Theme.Colors.TEXT_PRIMARY};
                         border: 1px solid {Theme.Colors.PRIMARY};
                         border-radius: {Theme.Dimensions.RADIUS_PILL}px;
-                        padding: 8px 16px;
+                        padding: 8px 14px;
+                        font-size: 11px;
                         font-weight: bold;
                         text-align: left;
                     }}
@@ -252,7 +280,8 @@ class MainWindow(QMainWindow):
                         color: {Theme.Colors.TEXT_SECONDARY};
                         border: 1px solid transparent;
                         border-radius: {Theme.Dimensions.RADIUS_PILL}px;
-                        padding: 8px 16px;
+                        padding: 8px 14px;
+                        font-size: 11px;
                         text-align: left;
                     }}
                     QPushButton:hover {{
