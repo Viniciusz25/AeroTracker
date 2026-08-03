@@ -1,32 +1,30 @@
 """
-Testes — Display Layer
-=======================
-Testa a integridade de instanciação da janela principal e das views do CustomTkinter em modo headless/sem interface física.
+Testes — Display Layer (PySide6 / Qt)
+======================================
+Testa a integridade de instanciação da janela principal e das telas em MVC.
 """
 
+import sys
 import pytest
+from PySide6.QtWidgets import QApplication
+
 from display.desktop.app_window import MainWindow
-from display.desktop.views.dashboard_view import DashboardView
-from display.desktop.views.aircraft_view import AircraftView
-from display.desktop.views.weather_view import WeatherView
+
+
+@pytest.fixture(scope="session")
+def qapp():
+    app = QApplication.instance()
+    if app is None:
+        app = QApplication(sys.argv)
+    yield app
 
 
 class TestDesktopUI:
-    def test_main_window_instantiation(self, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_main_window_instantiation(self, qapp) -> None:
         """
-        Valida se as classes da UI podem ser instanciadas.
-        Evitamos chamar app.mainloop() para não bloquear a execução dos testes.
+        Valida a instanciação da MainWindow e das telas MVC.
         """
-        # Desativa o loop da interface física caso esteja rodando em ambiente CI/headless
-        monkeypatch.setattr("customtkinter.CTk.mainloop", lambda self: None)
-
-        try:
-            app = MainWindow()
-            assert app.title() == "AeroTracker Core — Estação de Monitoramento"
-            assert "dashboard" in app.views
-            assert "aircraft" in app.views
-            assert "weather" in app.views
-            app.destroy()
-        except Exception as e:
-            # Em ambientes totalmente headless sem Tcl/Tk pode falhar por falta de DISPLAY
-            pytest.skip(f"Ambiente Tkinter não suportado em headless: {e}")
+        window = MainWindow()
+        assert window.windowTitle() == "AeroTracker Core — Estação de Monitoramento Aeroespacial"
+        assert window.stack.count() == 3
+        window.close()

@@ -1,15 +1,16 @@
 """
-AeroTracker Core — Ponto de Entrada Principal
-==============================================
+AeroTracker Core — Ponto de Entrada Principal (PySide6 / Qt)
+============================================================
 Orquestrador central da aplicação AeroTracker Core.
 
 Fluxo de Execução:
-    1. Inicialização dos subsistemas de bootstrap (AeroTrackerApp)
-    2. Instanciação e injeção de serviços de negócio
-    3. Inicialização do agendador em segundo plano (JobScheduler)
-    4. Carga inicial dos dados dos módulos em threads de background
-    5. Execução da interface de usuário Desktop (CustomTkinter)
-    6. Housekeeping e shutdown gracioso ao fechar a aplicação
+    1. Inicialização do QApplication (PySide6)
+    2. Bootstrap dos subsistemas de infraestrutura (AeroTrackerApp)
+    3. Instanciação e injeção de serviços de negócio
+    4. Inicialização do agendador em segundo plano (JobScheduler)
+    5. Carga inicial dos dados dos módulos em threads de background
+    6. Execução da janela principal (MainWindow em MVC)
+    7. Housekeeping e shutdown gracioso ao fechar o app
 """
 
 import asyncio
@@ -21,6 +22,8 @@ from pathlib import Path
 _PROJECT_ROOT = Path(__file__).parent.resolve()
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
+
+from PySide6.QtWidgets import QApplication
 
 from core.app import AeroTrackerApp
 from core.module_manager import module_manager
@@ -48,10 +51,13 @@ def _run_initial_fetch(service) -> None:
 
 
 def main() -> None:
-    """Ponto de entrada síncrono para inicialização e execução da UI."""
-    logger.info("Iniciando AeroTracker Core...")
+    """Ponto de entrada principal para inicialização e execução da aplicação Qt."""
+    logger.info("Iniciando AeroTracker Core (PySide6 Qt Engine)...")
 
-    # 1. Bootstrap da aplicação
+    # 1. Aplicação Qt
+    qt_app = QApplication(sys.argv)
+
+    # 2. Bootstrap dos subsistemas
     app = AeroTrackerApp()
     app.initialize()
 
@@ -70,10 +76,10 @@ def main() -> None:
         "nasa": nasa_service,
     }
 
-    # 2. Inicialização do JobScheduler
+    # 3. Inicialização do JobScheduler
     job_scheduler.start()
 
-    # Registrar rotinas dos módulos ativos no JobScheduler
+    # Registrar rotinas dos módulos ativos no JobScheduler e efetuar busca inicial
     if module_manager.is_active("aircraft"):
         job_scheduler.add_module_job(
             "aircraft",
@@ -114,17 +120,17 @@ def main() -> None:
         )
         _run_initial_fetch(nasa_service)
 
-    # 3. Execução da Janela Desktop
-    try:
-        window = MainWindow(services=services)
-        window.mainloop()
-    except Exception as e:
-        logger.error("Erro durante execução da janela principal: {err}", err=str(e))
-    finally:
-        # Encerramento gracioso
-        logger.info("Encerrando AeroTracker Core...")
-        job_scheduler.stop()
-        app.shutdown()
+    # 4. Execução da Janela Desktop (PySide6 / MVC)
+    window = MainWindow(services=services)
+    window.show()
+
+    exit_code = qt_app.exec()
+
+    # 5. Encerramento gracioso
+    logger.info("Encerrando AeroTracker Core...")
+    job_scheduler.stop()
+    app.shutdown()
+    sys.exit(exit_code)
 
 
 if __name__ == "__main__":
