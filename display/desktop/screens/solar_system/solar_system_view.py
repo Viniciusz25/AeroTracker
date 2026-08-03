@@ -1,7 +1,7 @@
 """
 AeroTracker Core — SolarSystem View (MVC)
 =========================================
-View pura da tela de Efemérides do Sistema Solar.
+View pura da tela de Efemérides do Sistema Solar Airspace Companion UI.
 """
 
 from PySide6.QtWidgets import QGridLayout, QLabel, QVBoxLayout, QWidget
@@ -25,7 +25,7 @@ class SolarSystemView(QWidget):
         # Header
         self.lbl_title = QLabel(self.model.title_text)
         self.lbl_title.setFont(Theme.Fonts.title_display())
-        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.CYAN_NEON};")
+        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY};")
         layout.addWidget(self.lbl_title)
 
         grid = QGridLayout()
@@ -35,7 +35,7 @@ class SolarSystemView(QWidget):
             panel = GlassPanel()
             l_name = QLabel(f"🪐 {name.upper()}")
             l_name.setFont(Theme.Fonts.section_header())
-            l_name.setStyleSheet(f"color: {Theme.Colors.CYAN_NEON}; border: none;")
+            l_name.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
             panel.main_layout.addWidget(l_name)
 
             l_dist = QLabel(f"Distance: {dist}  |  {period}")

@@ -1,7 +1,7 @@
 """
 AeroTracker Core — Moon View (MVC)
 ==================================
-View pura da tela de Efemérides Lunares.
+View pura da tela de Efemérides Lunares Airspace Companion UI.
 """
 
 from PySide6.QtWidgets import QGridLayout, QLabel, QVBoxLayout, QWidget
@@ -25,31 +25,40 @@ class MoonView(QWidget):
         # Header
         self.lbl_title = QLabel(self.model.title_text)
         self.lbl_title.setFont(Theme.Fonts.title_display())
-        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.CYAN_NEON};")
+        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY};")
         layout.addWidget(self.lbl_title)
 
         grid = QGridLayout()
         grid.setSpacing(Theme.Dimensions.PAD_M)
 
         p1 = GlassPanel()
-        p1.main_layout.addWidget(QLabel("LUNAR PHASE"))
+        lbl_p1 = QLabel("LUNAR PHASE")
+        lbl_p1.setFont(Theme.Fonts.caption())
+        lbl_p1.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        p1.main_layout.addWidget(lbl_p1)
         l1 = QLabel(self.model.phase_name)
         l1.setFont(Theme.Fonts.metric_huge())
         l1.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY}; border: none;")
         p1.main_layout.addWidget(l1)
 
         p2 = GlassPanel()
-        p2.main_layout.addWidget(QLabel("ILLUMINATION"))
+        lbl_p2 = QLabel("ILLUMINATION")
+        lbl_p2.setFont(Theme.Fonts.caption())
+        lbl_p2.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        p2.main_layout.addWidget(lbl_p2)
         l2 = QLabel(self.model.illumination)
         l2.setFont(Theme.Fonts.metric_huge())
-        l2.setStyleSheet(f"color: {Theme.Colors.POSITIVE}; border: none;")
+        l2.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
         p2.main_layout.addWidget(l2)
 
         p3 = GlassPanel()
-        p3.main_layout.addWidget(QLabel("DISTANCE TO EARTH"))
+        lbl_p3 = QLabel("DISTANCE TO EARTH")
+        lbl_p3.setFont(Theme.Fonts.caption())
+        lbl_p3.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        p3.main_layout.addWidget(lbl_p3)
         l3 = QLabel(self.model.distance_km)
         l3.setFont(Theme.Fonts.metric_huge())
-        l3.setStyleSheet(f"color: {Theme.Colors.BLUE_NEON}; border: none;")
+        l3.setStyleSheet(f"color: {Theme.Colors.SECONDARY}; border: none;")
         p3.main_layout.addWidget(l3)
 
         grid.addWidget(p1, 0, 0)
