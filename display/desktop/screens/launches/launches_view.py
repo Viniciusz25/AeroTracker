@@ -1,7 +1,7 @@
 """
 AeroTracker Core — Launches View (MVC)
 ======================================
-View pura de agenda de lançamentos espaciais.
+View pura de agenda de lançamentos espaciais Airspace Companion UI.
 """
 
 from PySide6.QtCore import Signal
@@ -15,7 +15,7 @@ from display.theme import Theme
 
 class LaunchesView(QWidget):
     """
-    View pura do módulo de Lançamentos.
+    View pura do módulo de Lançamentos Espaciais.
     """
 
     refresh_requested = Signal()
@@ -32,7 +32,7 @@ class LaunchesView(QWidget):
         header = QHBoxLayout()
         self.lbl_title = QLabel(self.model.title_text)
         self.lbl_title.setFont(Theme.Fonts.title_display())
-        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.CYAN_NEON};")
+        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY};")
         header.addWidget(self.lbl_title)
         header.addStretch()
 
