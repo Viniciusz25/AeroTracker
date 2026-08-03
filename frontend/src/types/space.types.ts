@@ -1,0 +1,33 @@
+import type { Coordinate } from './aircraft.types';
+
+export interface ISSPosition {
+  name: string;
+  norad_id: number;
+  position: Coordinate;
+  altitude_km: number;
+  velocity_kmh: number;
+  visibility: string;
+  footprint_km: number;
+  updated_at: string;
+}
+
+export interface LaunchItem {
+  id: string;
+  name: string;
+  vehicle: string;
+  provider: string;
+  pad: string;
+  status: string;
+  net: string;
+  probability_pct: number | null;
+  mission_type: string | null;
+}
+
+export interface NasaApod {
+  title: string;
+  date: string;
+  explanation: string;
+  url: string;
+  media_type: string;
+  copyright?: string;
+}

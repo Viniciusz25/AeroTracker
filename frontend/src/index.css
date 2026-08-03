@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-base: #050608;
+    --bg-panel: #0c0e12;
+    --bg-card: #131720;
+    --bg-card-alt: #181d25;
+    --primary: #47f3a0;
+    --primary-dim: #2bb87a;
+    --secondary: #33a8ff;
+    --attention: #ffc857;
+    --danger: #ff5d5d;
+    --text-primary: #ffffff;
+    --text-secondary: #b0bac8;
+    --text-muted: #5a6475;
+    --border-subtle: #1a1f2b;
+    --border-default: #242c3a;
+    --cyan-accent: #00d4ff;
+  }
+
+  html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Custom scrollbars for aerospace panels */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0c0e12;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1f2b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #242c3a;
+}
+
+/* Monospace font utility for telemetric displays */
+.font-mono-telemetry {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Radial sweep animation keyframes for radar */
+@keyframes radar-sweep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-radar-sweep {
+  animation: radar-sweep 4s linear infinite;
+  transform-origin: center;
+}
+
+/* Pulse animation for radar blips */
+@keyframes blip-pulse {
+  0% {
+    r: 4;
+    opacity: 1;
+  }
+  50% {
+    r: 8;
+    opacity: 0.5;
+  }
+  100% {
+    r: 4;
+    opacity: 1;
+  }
+}
+
+.animate-blip {
+  animation: blip-pulse 2s ease-in-out infinite;
+}
