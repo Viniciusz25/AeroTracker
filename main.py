@@ -5,12 +5,13 @@ Orquestrador central da aplicação AeroTracker Core.
 
 Fluxo de Execução:
     1. Inicialização do QApplication (PySide6)
-    2. Bootstrap dos subsistemas de infraestrutura (AeroTrackerApp)
-    3. Instanciação e injeção de serviços de negócio
-    4. Inicialização do agendador em segundo plano (JobScheduler)
-    5. Carga inicial dos dados dos módulos em threads de background
-    6. Execução da janela principal (MainWindow em MVC)
-    7. Housekeeping e shutdown gracioso ao fechar o app
+    2. Configuração de Exception Handler global para proteger a UI contra fechamentos abruptos
+    3. Bootstrap dos subsistemas de infraestrutura (AeroTrackerApp)
+    4. Instanciação e injeção de serviços de negócio
+    5. Inicialização do agendador em segundo plano (JobScheduler)
+    6. Carga inicial dos dados dos módulos em threads de background
+    7. Execução da janela principal (MainWindow em MVC)
+    8. Housekeeping e shutdown gracioso ao fechar o app
 """
 
 import asyncio
@@ -37,6 +38,17 @@ from services.weather_service import WeatherService
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
+
+
+def _handle_exception(exc_type, exc_value, exc_traceback):
+    """Captura e registra exceções não tratadas sem derrubar o processo."""
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+    logger.critical("Exceção não tratada no Qt Event Loop: {err}", err=exc_value, exc_info=(exc_type, exc_value, exc_traceback))
+
+
+sys.excepthook = _handle_exception
 
 
 def _run_initial_fetch(service) -> None:
