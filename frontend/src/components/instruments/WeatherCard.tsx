@@ -26,6 +26,14 @@ export const WeatherCard: FC<WeatherCardProps> = ({ weather, className = '' }) =
   const humidityDisplay = weather.humidity_pct ?? 0;
   const visDisplay = typeof weather.visibility_m === 'number' ? (weather.visibility_m / 1000).toFixed(1) : '--';
 
+  const locationName = weather.location || weather.location_name || 'Station SBGR';
+  const conditionText =
+    typeof weather.condition === 'object' && weather.condition !== null
+      ? weather.condition.description || weather.condition.main || 'Clear'
+      : typeof weather.condition === 'string'
+      ? weather.condition
+      : 'Operational';
+
   return (
     <div className={`bg-[#131720] border border-[#1A1F2B] rounded-2xl p-5 shadow-2xl backdrop-blur-md ${className}`}>
       {/* Header */}
@@ -35,8 +43,8 @@ export const WeatherCard: FC<WeatherCardProps> = ({ weather, className = '' }) =
             <Cloud size={20} />
           </div>
           <div>
-            <h3 className="font-['Outfit'] font-bold text-base text-white">{weather.location || 'Station SBGR'}</h3>
-            <p className="text-xs font-mono text-[#5A6475]">{weather.condition || 'Operational'}</p>
+            <h3 className="font-['Outfit'] font-bold text-base text-white">{locationName}</h3>
+            <p className="text-xs font-mono text-[#5A6475]">{conditionText}</p>
           </div>
         </div>
         <StatusBadge status={weather.flight_category === 'IFR' ? 'ifr' : 'vfr'} customLabel={weather.flight_category || 'VFR'} />
