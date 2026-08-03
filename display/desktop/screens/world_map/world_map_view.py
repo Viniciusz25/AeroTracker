@@ -31,7 +31,6 @@ class WorldMapView(QWidget):
 
         # Main Globe Instrument Panel
         panel = GlassPanel()
-        p_layout = QVBoxLayout(panel)
 
         top_info = QHBoxLayout()
         self.lbl_flights = QLabel(f"GLOBAL FLIGHT TRACKS: {self.model.active_flights}")
@@ -40,12 +39,12 @@ class WorldMapView(QWidget):
         top_info.addWidget(self.lbl_flights)
         top_info.addStretch()
         top_info.addWidget(AvionicsBadge("GLOBAL PROJECTION ACTIVE", badge_type="positive"))
-        p_layout.addLayout(top_info)
+        panel.main_layout.addLayout(top_info)
 
         self.lbl_iss = QLabel(self.model.iss_lat_lon)
         self.lbl_iss.setFont(Theme.Fonts.body_bold())
         self.lbl_iss.setStyleSheet(f"color: {Theme.Colors.CYAN_NEON}; border: none;")
-        p_layout.addWidget(self.lbl_iss)
+        panel.main_layout.addWidget(self.lbl_iss)
 
         layout.addWidget(panel)
         layout.addStretch()

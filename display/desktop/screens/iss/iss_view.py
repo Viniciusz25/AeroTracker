@@ -60,11 +60,12 @@ class ISSView(QWidget):
 
         # Visibility Badge Panel
         panel = GlassPanel()
-        p_layout = QHBoxLayout(panel)
-        p_layout.addWidget(QLabel("ORBITAL VISIBILITY STATE:"))
+        p_row = QHBoxLayout()
+        p_row.addWidget(QLabel("ORBITAL VISIBILITY STATE:"))
         self.badge_vis = AvionicsBadge(self.model.vis_text, badge_type="positive")
-        p_layout.addWidget(self.badge_vis)
-        p_layout.addStretch()
+        p_row.addWidget(self.badge_vis)
+        p_row.addStretch()
+        panel.main_layout.addLayout(p_row)
 
         layout.addWidget(panel)
         layout.addStretch()
