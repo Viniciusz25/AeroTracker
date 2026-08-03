@@ -75,10 +75,12 @@ class VectorMapWidget(QGraphicsView):
 
         # Textos cardeais vetoriais
         font = QFont(Theme.Fonts.FONT_FAMILY, 9, QFont.Weight.Bold)
-        for text, x, y in [("N", 0, -r + 5), ("S", 0, r - 20), ("E", r - 15, -10), ("W", -r + 5, -10)]:
-            t = self.scene.addText(text, font)
-            t.setDefaultTextColor(QColor(Theme.Colors.PRIMARY))
-            t.setPos(x, y)
+        for label_text, x, y in [("N", 0, -r + 5), ("S", 0, r - 20), ("E", r - 15, -10), ("W", -r + 5, -10)]:
+            t_item = QGraphicsTextItem(label_text)
+            t_item.setFont(font)
+            t_item.setDefaultTextColor(QColor(Theme.Colors.PRIMARY))
+            t_item.setPos(x, y)
+            self.scene.addItem(t_item)
 
     def set_center(self, lat: float, lon: float) -> None:
         self.center_lat = lat
@@ -127,6 +129,8 @@ class VectorMapWidget(QGraphicsView):
 
             # Rótulo vetorial com o callsign
             callsign = getattr(ac, "display_id", "") or getattr(ac, "callsign", "") or "AC"
-            t = self.scene.addText(callsign, QFont(Theme.Fonts.FONT_FAMILY, 8))
-            t.setDefaultTextColor(QColor(Theme.Colors.TEXT_PRIMARY))
-            t.setPos(screen_x + 5, screen_y - 10)
+            ac_label = QGraphicsTextItem(callsign)
+            ac_label.setFont(QFont(Theme.Fonts.FONT_FAMILY, 8))
+            ac_label.setDefaultTextColor(QColor(Theme.Colors.TEXT_PRIMARY))
+            ac_label.setPos(screen_x + 5, screen_y - 10)
+            self.scene.addItem(ac_label)
