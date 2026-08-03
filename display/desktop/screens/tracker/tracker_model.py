@@ -79,3 +79,11 @@ class TrackerModel(QObject):
     @property
     def eta(self) -> str:
         return self._eta
+
+    def set_active_flight(self, flight_number: str, departure_date: str = "") -> None:
+        """Atualiza o número do voo ativo e notifica os observadores."""
+        if flight_number:
+            self._active_flight = flight_number.strip().upper()
+        if departure_date:
+            self._departure_date = departure_date.strip()
+        self.data_changed.emit()

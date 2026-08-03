@@ -4,7 +4,7 @@ AeroTracker Core — Tracker View (MVC)
 View pura do módulo Tracker (Airspace Companion UI).
 """
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QLineEdit, QVBoxLayout, QWidget
 
 from display.components.animated_card import GlassPanel
@@ -17,6 +17,8 @@ class TrackerView(QWidget):
     """
     View pura do módulo Tracker (Airspace Companion UI).
     """
+
+    add_flight_requested = Signal(str, str)
 
     def __init__(self, model: TrackerModel, parent=None) -> None:
         super().__init__(parent)
@@ -122,6 +124,7 @@ class TrackerView(QWidget):
                 color: {Theme.Colors.PRIMARY};
             }}
         """)
+        self.btn_add.clicked.connect(self._on_add_clicked)
 
         self.btn_refresh = GlassButton("Refresh Active", is_primary=False)
         self.btn_refresh.setStyleSheet(f"""
@@ -139,6 +142,7 @@ class TrackerView(QWidget):
                 border: 1px solid {Theme.Colors.PRIMARY};
             }}
         """)
+        self.btn_refresh.clicked.connect(self._on_add_clicked)
 
         btn_box.addWidget(self.btn_add)
         btn_box.addWidget(self.btn_refresh)
@@ -182,27 +186,27 @@ class TrackerView(QWidget):
 
         fn_box = QVBoxLayout()
         fn_box.setSpacing(2)
-        l_fn = QLabel(f"{self.model.active_flight}  ACTIVE")
-        l_fn.setFont(Theme.Fonts.body_bold())
-        l_fn.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
-        l_date = QLabel("Sat, Aug 1, 2026")
-        l_date.setFont(Theme.Fonts.caption())
-        l_date.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
-        fn_box.addWidget(l_fn)
-        fn_box.addWidget(l_date)
+        self.l_fn = QLabel(f"{self.model.active_flight}  ACTIVE")
+        self.l_fn.setFont(Theme.Fonts.body_bold())
+        self.l_fn.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
+        self.l_date = QLabel(f"Sat, Aug 1, 2026")
+        self.l_date.setFont(Theme.Fonts.caption())
+        self.l_date.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        fn_box.addWidget(self.l_fn)
+        fn_box.addWidget(self.l_date)
         sched_row.addLayout(fn_box)
 
         sched_row.addStretch()
 
         info_box = QVBoxLayout()
         info_box.setSpacing(2)
-        l_info1 = QLabel(f"Scheduled · 0% · ETA {self.model.eta}")
-        l_info1.setFont(Theme.Fonts.caption())
-        l_info1.setStyleSheet(f"color: {Theme.Colors.TEXT_SECONDARY}; border: none;")
+        self.l_info1 = QLabel(f"Scheduled · 0% · ETA {self.model.eta}")
+        self.l_info1.setFont(Theme.Fonts.caption())
+        self.l_info1.setStyleSheet(f"color: {Theme.Colors.TEXT_SECONDARY}; border: none;")
         l_info2 = QLabel("Scheduled 02:00")
         l_info2.setFont(Theme.Fonts.caption())
         l_info2.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
-        info_box.addWidget(l_info1)
+        info_box.addWidget(self.l_info1)
         info_box.addWidget(l_info2)
         sched_row.addLayout(info_box)
 
@@ -243,10 +247,10 @@ class TrackerView(QWidget):
         # Center Plane Icon
         center_box = QVBoxLayout()
         center_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        l_center_plane = QLabel(f"✈  {self.model.active_flight}")
-        l_center_plane.setFont(Theme.Fonts.body_bold())
-        l_center_plane.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none; font-size: 14px;")
-        center_box.addWidget(l_center_plane)
+        self.l_center_plane = QLabel(f"✈  {self.model.active_flight}")
+        self.l_center_plane.setFont(Theme.Fonts.body_bold())
+        self.l_center_plane.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none; font-size: 14px;")
+        center_box.addWidget(self.l_center_plane)
         route_row.addLayout(center_box)
 
         route_row.addStretch()
@@ -318,10 +322,24 @@ class TrackerView(QWidget):
 
         c3.main_layout.addLayout(metrics_row)
 
-        l_c3_sub = QLabel(f"Scheduled · 0% · ETA {self.model.eta} · AirLabs fallback")
-        l_c3_sub.setFont(Theme.Fonts.caption())
-        l_c3_sub.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none; font-size: 9px;")
-        c3.main_layout.addWidget(l_c3_sub)
+        self.l_c3_sub = QLabel(f"Scheduled · 0% · ETA {self.model.eta} · AirLabs fallback")
+        self.l_c3_sub.setFont(Theme.Fonts.caption())
+        self.l_c3_sub.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none; font-size: 9px;")
+        c3.main_layout.addWidget(self.l_c3_sub)
 
         layout.addWidget(c3)
         layout.addStretch()
+
+        self.model.data_changed.connect(self.update_from_model)
+
+    def _on_add_clicked(self) -> None:
+        flight = self.input_flight.text()
+        date = self.input_date.text()
+        self.model.set_active_flight(flight, date)
+
+    def update_from_model(self) -> None:
+        flight = self.model.active_flight
+        self.l_fn.setText(f"{flight}  ACTIVE")
+        self.l_center_plane.setText(f"✈  {flight}")
+        self.l_info1.setText(f"Scheduled · 0% · ETA {self.model.eta}")
+        self.l_c3_sub.setText(f"Scheduled · 0% · ETA {self.model.eta} · AirLabs fallback")
