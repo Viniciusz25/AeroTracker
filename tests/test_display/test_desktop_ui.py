@@ -1,7 +1,7 @@
 """
-Testes — Display Layer (PySide6 / Qt)
-======================================
-Testa a integridade de instanciação da janela principal e das telas em MVC.
+Testes — Display Layer (Glass Cockpit Engine)
+==============================================
+Testa a integridade de instanciação das 11 telas independentes MVC na MainWindow.
 """
 
 import sys
@@ -22,9 +22,9 @@ def qapp():
 class TestDesktopUI:
     def test_main_window_instantiation(self, qapp) -> None:
         """
-        Valida a instanciação da MainWindow e das telas MVC.
+        Valida a instanciação da MainWindow e das 11 telas independentes MVC.
         """
         window = MainWindow()
-        assert window.windowTitle() == "AeroTracker Core — Estação de Monitoramento Aeroespacial"
-        assert window.stack.count() == 3
+        assert window.windowTitle() == "AeroTracker Core — Avionics Glass Cockpit & Control Station"
+        assert window.stack.count() == 11
         window.close()

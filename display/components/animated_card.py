@@ -1,28 +1,27 @@
 """
-AeroTracker Core — Componente AnimatedCard
-==========================================
-Card visual interativo com animações suaves de hover utilizando QPropertyAnimation.
+AeroTracker Core — Componente GlassPanel
+========================================
+Moldura visual estilo painel Glass Cockpit / instrumento aeroespacial.
 """
 
-from PySide6.QtCore import QEasingCurve, QPropertyAnimation, QRect, Qt
+from PySide6.QtCore import QEasingCurve, QPropertyAnimation
 from PySide6.QtWidgets import QFrame, QGraphicsOpacityEffect, QVBoxLayout
-
 from display.theme import Theme
 
 
-class AnimatedCard(QFrame):
+class GlassPanel(QFrame):
     """
-    Card reutilizável estilizado com animações dinâmicas de transição e opacidade via QPropertyAnimation.
+    Painel de instrumento aeroespacial reutilizável com transparência e bordas técnicas.
     """
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setObjectName("AnimatedCard")
+        self.setObjectName("GlassPanel")
         self.setStyleSheet(f"""
-            QFrame#AnimatedCard {{
+            QFrame#GlassPanel {{
                 background-color: {Theme.Colors.BG_CARD};
                 border: 1px solid {Theme.Colors.BORDER};
-                border-radius: {Theme.Dimensions.RADIUS_CARD}px;
+                border-radius: {Theme.Dimensions.RADIUS_PANEL}px;
             }}
         """)
 
@@ -36,23 +35,22 @@ class AnimatedCard(QFrame):
         )
         self.main_layout.setSpacing(Theme.Dimensions.PAD_S)
 
-        # Efeito de opacidade para animação
+        # Transição de opacidade sutil via QPropertyAnimation
         self.opacity_effect = QGraphicsOpacityEffect(self)
-        self.opacity_effect.setOpacity(0.92)
+        self.opacity_effect.setOpacity(0.95)
         self.setGraphicsEffect(self.opacity_effect)
 
-        # Configuração da animação QPropertyAnimation
         self.anim_opacity = QPropertyAnimation(self.opacity_effect, b"opacity")
-        self.anim_opacity.setDuration(180)
-        self.anim_opacity.setEasingCurve(QEasingCurve.Type.OutCubic)
+        self.anim_opacity.setDuration(160)
+        self.anim_opacity.setEasingCurve(QEasingCurve.Type.OutQuad)
 
     def enterEvent(self, event) -> None:
-        """Dispara animação QPropertyAnimation ao passar o cursor."""
+        """Sutil destaque de borda ao passar o cursor."""
         self.setStyleSheet(f"""
-            QFrame#AnimatedCard {{
+            QFrame#GlassPanel {{
                 background-color: {Theme.Colors.BG_CARD_HOVER};
-                border: 1px solid {Theme.Colors.PRIMARY};
-                border-radius: {Theme.Dimensions.RADIUS_CARD}px;
+                border: 1px solid {Theme.Colors.CYAN_NEON};
+                border-radius: {Theme.Dimensions.RADIUS_PANEL}px;
             }}
         """)
         self.anim_opacity.stop()
@@ -62,16 +60,20 @@ class AnimatedCard(QFrame):
         super().enterEvent(event)
 
     def leaveEvent(self, event) -> None:
-        """Dispara animação QPropertyAnimation ao retirar o cursor."""
+        """Restaura estilo padrão."""
         self.setStyleSheet(f"""
-            QFrame#AnimatedCard {{
+            QFrame#GlassPanel {{
                 background-color: {Theme.Colors.BG_CARD};
                 border: 1px solid {Theme.Colors.BORDER};
-                border-radius: {Theme.Dimensions.RADIUS_CARD}px;
+                border-radius: {Theme.Dimensions.RADIUS_PANEL}px;
             }}
         """)
         self.anim_opacity.stop()
         self.anim_opacity.setStartValue(self.opacity_effect.opacity())
-        self.anim_opacity.setEndValue(0.92)
+        self.anim_opacity.setEndValue(0.95)
         self.anim_opacity.start()
         super().leaveEvent(event)
+
+
+# Alias de compatibilidade
+AnimatedCard = GlassPanel
