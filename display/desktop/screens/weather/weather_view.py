@@ -7,8 +7,9 @@ View pura da tela de Clima baseada em layouts dinâmicos e componentes reutiliz�
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
-from display.components.animated_card import AnimatedCard
-from display.components.primary_button import AnimatedButton
+from display.components.animated_card import GlassPanel
+from display.components.primary_button import GlassButton
+from display.components.status_badge import AvionicsBadge
 from display.desktop.screens.weather.weather_model import WeatherModel
 from display.desktop.screens.weather.weather_widgets import WeatherMetricCardWidget
 from display.theme import Theme
@@ -16,7 +17,7 @@ from display.theme import Theme
 
 class WeatherView(QWidget):
     """
-    View pura do módulo de clima.
+    View pura do módulo de clima tático.
     """
 
     refresh_requested = Signal()
@@ -38,31 +39,38 @@ class WeatherView(QWidget):
         # Header Bar
         header_layout = QHBoxLayout()
         self.lbl_title = QLabel(self.model.title_text)
-        self.lbl_title.setFont(Theme.Fonts.title_section())
+        self.lbl_title.setFont(Theme.Fonts.title_display())
         self.lbl_title.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY};")
         header_layout.addWidget(self.lbl_title)
         header_layout.addStretch()
 
-        self.btn_refresh = AnimatedButton("🔄 Atualizar Agora", is_primary=True)
+        self.btn_refresh = GlassButton("🔄 SCAN METAR", is_primary=True)
         self.btn_refresh.clicked.connect(self.refresh_requested.emit)
         header_layout.addWidget(self.btn_refresh)
         self.main_layout.addLayout(header_layout)
 
         # Main Card de Destaque Temperatura
-        self.card_main = AnimatedCard()
-        self.lbl_location = QLabel(self.model.location_text)
+        self.card_main = GlassPanel()
+
+        top_row = QHBoxLayout()
+        self.lbl_location = QLabel(f"📍 {self.model.location_text}")
         self.lbl_location.setFont(Theme.Fonts.title_section())
         self.lbl_location.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY}; border: none;")
-        self.card_main.main_layout.addWidget(self.lbl_location)
+        top_row.addWidget(self.lbl_location)
+        top_row.addStretch()
+
+        self.vfr_badge = AvionicsBadge("VFR OPTIMAL", badge_type="positive")
+        top_row.addWidget(self.vfr_badge)
+        self.card_main.main_layout.addLayout(top_row)
 
         self.lbl_temp = QLabel(self.model.temp_text)
-        self.lbl_temp.setFont(Theme.Fonts.metric_large())
-        self.lbl_temp.setStyleSheet(f"color: {Theme.Colors.AIRBORNE}; border: none;")
+        self.lbl_temp.setFont(Theme.Fonts.metric_huge())
+        self.lbl_temp.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
         self.card_main.main_layout.addWidget(self.lbl_temp)
 
         self.lbl_cond = QLabel(f"Condição: {self.model.condition_text}")
         self.lbl_cond.setFont(Theme.Fonts.body_bold())
-        self.lbl_cond.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
+        self.lbl_cond.setStyleSheet(f"color: {Theme.Colors.TEXT_SECONDARY}; border: none;")
         self.card_main.main_layout.addWidget(self.lbl_cond)
 
         self.main_layout.addWidget(self.card_main)
@@ -73,7 +81,7 @@ class WeatherView(QWidget):
 
         self.card_feels = WeatherMetricCardWidget("🌡 Sensação Térmica", self.model.feels_text)
         self.card_humidity = WeatherMetricCardWidget("💧 Umidade Relativa", self.model.humidity_text)
-        self.card_wind = WeatherMetricCardWidget("💨 Vento", self.model.wind_text)
+        self.card_wind = WeatherMetricCardWidget("💨 Vento Tático", self.model.wind_text)
         self.card_pressure = WeatherMetricCardWidget("⏲ Pressão Atmosférica", self.model.pressure_text)
 
         self.grid_layout.addWidget(self.card_feels, 0, 0)
