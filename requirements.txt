@@ -1,0 +1,45 @@
+# =============================================================================
+# AeroTracker Core — Dependências Python
+# Compatível com Python 3.11+
+# =============================================================================
+
+# --- HTTP / Async -----------------------------------------------------------
+httpx>=0.27.0               # Cliente HTTP moderno com suporte a async
+anyio>=4.4.0                # Backend async (asyncio / trio)
+
+# --- Validação e Modelos ----------------------------------------------------
+pydantic>=2.7.0             # Validação de dados, serialização, type hints
+pydantic-settings>=2.3.0    # Settings via variáveis de ambiente / .env
+
+# --- Configuração -----------------------------------------------------------
+python-dotenv>=1.0.0        # Carregamento de arquivos .env
+tomli>=2.0.0                # Parser TOML (fallback para Python < 3.11)
+
+# --- Scheduler --------------------------------------------------------------
+APScheduler>=3.10.4         # Agendador de tarefas com múltiplos backends
+
+# --- Cache ------------------------------------------------------------------
+cachetools>=5.3.3           # Cache em memória com TTL
+
+# --- Logging ----------------------------------------------------------------
+loguru>=0.7.2               # Logging profissional com rotação automática
+
+# --- GUI Desktop (fase inicial) ---------------------------------------------
+customtkinter>=5.2.2        # GUI moderna com dark mode nativo
+
+# --- Astronomia -------------------------------------------------------------
+ephem>=4.1.5                # Cálculos astronômicos (planetas, lua, sol)
+astral>=3.2                 # Horários de nascer/pôr do sol, fases da lua
+
+# --- Utilitários Geográficos ------------------------------------------------
+pytz>=2024.1                # Fusos horários
+geopy>=2.4.1                # Geocoding e cálculo de distâncias
+
+# --- Utilitários Gerais -----------------------------------------------------
+rich>=13.7.0                # Output rico no terminal (debug, logs coloridos)
+
+# --- Testes -----------------------------------------------------------------
+pytest>=8.2.0
+pytest-asyncio>=0.23.7
+pytest-mock>=3.14.0
+respx>=0.21.1               # Mock para requisições httpx

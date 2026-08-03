@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "aerotracker-core"
+version = "0.1.0"
+description = "Plataforma modular de monitoramento aeroespacial em tempo real"
+authors = [{ name = "AeroTracker Team" }]
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+keywords = [
+    "aerospace",
+    "aircraft",
+    "tracking",
+    "iss",
+    "astronomy",
+    "radar",
+    "real-time",
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+aerotracker = "main:main"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]

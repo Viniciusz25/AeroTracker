@@ -1,0 +1,89 @@
+# =============================================================================
+# AeroTracker Core — Configuração dos Módulos
+# =============================================================================
+# Ative ou desative módulos alterando o valor de `enabled`.
+# Cada módulo pode ter suas próprias configurações específicas aqui.
+#
+# interval_seconds: frequência de atualização via Scheduler
+# enabled: se false, o módulo não carrega e não consome recursos
+# =============================================================================
+
+[modules]
+
+# ---------------------------------------------------------------------------
+# Aeronaves
+# ---------------------------------------------------------------------------
+[modules.aircraft]
+enabled = true
+interval_seconds = 3
+provider = "opensky"           # opensky | adsbexchange | flightaware
+max_aircraft = 200             # Limite de aeronaves retornadas por consulta
+radius_km = 250                # Raio de busca em torno da localização padrão
+
+# ---------------------------------------------------------------------------
+# Clima
+# ---------------------------------------------------------------------------
+[modules.weather]
+enabled = true
+interval_seconds = 300         # 5 minutos
+provider = "openweather"       # openweather | openmeteo
+
+# ---------------------------------------------------------------------------
+# ISS (Estação Espacial Internacional)
+# ---------------------------------------------------------------------------
+[modules.iss]
+enabled = true
+interval_seconds = 5
+
+# ---------------------------------------------------------------------------
+# Lançamentos Espaciais
+# ---------------------------------------------------------------------------
+[modules.launch]
+enabled = true
+interval_seconds = 600         # 10 minutos
+provider = "launchlibrary"     # launchlibrary | spacex
+upcoming_days = 30             # Buscar lançamentos nos próximos N dias
+
+# ---------------------------------------------------------------------------
+# Lua
+# ---------------------------------------------------------------------------
+[modules.moon]
+enabled = true
+interval_seconds = 3600        # 1 hora
+
+# ---------------------------------------------------------------------------
+# Sistema Solar
+# ---------------------------------------------------------------------------
+[modules.solar_system]
+enabled = true
+interval_seconds = 3600        # 1 hora
+
+# ---------------------------------------------------------------------------
+# NASA (APOD, NEO, etc.)
+# ---------------------------------------------------------------------------
+[modules.nasa]
+enabled = true
+interval_seconds = 3600        # 1 hora
+
+# ---------------------------------------------------------------------------
+# Satélites (N2YO — estrutura preparada)
+# ---------------------------------------------------------------------------
+[modules.satellites]
+enabled = false                # Requer chave N2YO
+interval_seconds = 30
+
+# ---------------------------------------------------------------------------
+# Mapas
+# ---------------------------------------------------------------------------
+[modules.maps]
+enabled = true
+default_zoom = 6
+tile_provider = "openstreetmap"
+
+# ---------------------------------------------------------------------------
+# Notificações
+# ---------------------------------------------------------------------------
+[modules.notifications]
+enabled = true
+sound_enabled = false
+desktop_notifications = true
