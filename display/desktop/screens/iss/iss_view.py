@@ -1,7 +1,7 @@
 """
 AeroTracker Core — ISS View (MVC)
 =================================
-View pura do rastreador da ISS com telemetria orbital Glass Cockpit.
+View pura do rastreador da ISS com telemetria orbital Airspace Companion UI.
 """
 
 from PySide6.QtCore import Qt, Signal
@@ -33,7 +33,7 @@ class ISSView(QWidget):
         header = QHBoxLayout()
         self.lbl_title = QLabel(self.model.title_text)
         self.lbl_title.setFont(Theme.Fonts.title_display())
-        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.CYAN_NEON};")
+        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY};")
         header.addWidget(self.lbl_title)
         header.addStretch()
 
@@ -61,7 +61,11 @@ class ISSView(QWidget):
         # Visibility Badge Panel
         panel = GlassPanel()
         p_row = QHBoxLayout()
-        p_row.addWidget(QLabel("ORBITAL VISIBILITY STATE:"))
+        lbl_v_title = QLabel("ORBITAL VISIBILITY STATE:")
+        lbl_v_title.setFont(Theme.Fonts.body_bold())
+        lbl_v_title.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        p_row.addWidget(lbl_v_title)
+
         self.badge_vis = AvionicsBadge(self.model.vis_text, badge_type="positive")
         p_row.addWidget(self.badge_vis)
         p_row.addStretch()
@@ -81,7 +85,7 @@ class ISSView(QWidget):
 
         lbl_v = QLabel(val)
         lbl_v.setFont(Theme.Fonts.metric_huge())
-        lbl_v.setStyleSheet(f"color: {Theme.Colors.CYAN_NEON}; border: none;")
+        lbl_v.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
         panel.main_layout.addWidget(lbl_v)
         panel.lbl_val = lbl_v
         return panel
