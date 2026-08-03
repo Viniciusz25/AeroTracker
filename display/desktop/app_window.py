@@ -210,7 +210,7 @@ class MainWindow(QMainWindow):
 
         # 1. Tracker (Voo em tempo real Airspace Companion)
         self.tracker_m = TrackerModel()
-        self.tracker_c = TrackerController(self.tracker_m)
+        self.tracker_c = TrackerController(self.tracker_m, service=self.services.get("aircraft"))
         self.stack.addWidget(TrackerView(self.tracker_m))
 
         # 2. Weather
