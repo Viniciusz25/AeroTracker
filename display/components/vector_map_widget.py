@@ -131,9 +131,9 @@ class VectorRadarWidget(QGraphicsView):
 
             # Triângulo vetorial representando a aeronave em movimento
             size = 8
-            p1 = (screen_x + size * math.cos(heading_rad), screen_y + size * math.sin(heading_rad))
-            p2 = (screen_x + (size / 2) * math.cos(heading_rad + 2.4), screen_y + (size / 2) * math.sin(heading_rad + 2.4))
-            p3 = (screen_x + (size / 2) * math.cos(heading_rad - 2.4), screen_y + (size / 2) * math.sin(heading_rad - 2.4))
+            p1 = QPointF(screen_x + size * math.cos(heading_rad), screen_y + size * math.sin(heading_rad))
+            p2 = QPointF(screen_x + (size / 2) * math.cos(heading_rad + 2.4), screen_y + (size / 2) * math.sin(heading_rad + 2.4))
+            p3 = QPointF(screen_x + (size / 2) * math.cos(heading_rad - 2.4), screen_y + (size / 2) * math.sin(heading_rad - 2.4))
 
             polygon = QPolygonF([p1, p2, p3])
             self.scene.addPolygon(polygon, pen, brush)
