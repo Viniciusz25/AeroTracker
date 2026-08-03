@@ -1,7 +1,7 @@
 """
 AeroTracker Core — Clock View (MVC)
 ===================================
-View pura de cronômetro e relógio de precisão aeroespacial.
+View pura de cronômetro e relógio de precisão aeroespacial Airspace Companion UI.
 """
 
 from PySide6.QtWidgets import QGridLayout, QLabel, QVBoxLayout, QWidget
@@ -25,21 +25,29 @@ class ClockView(QWidget):
         # Header
         self.lbl_title = QLabel(self.model.title_text)
         self.lbl_title.setFont(Theme.Fonts.title_display())
-        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.CYAN_NEON};")
+        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY};")
         layout.addWidget(self.lbl_title)
 
         grid = QGridLayout()
         grid.setSpacing(Theme.Dimensions.PAD_M)
 
         p1 = GlassPanel()
-        p1.main_layout.addWidget(QLabel("UNIVERSAL TIME COORDINATED (UTC)"))
+        lbl_p1 = QLabel("UNIVERSAL TIME COORDINATED (UTC)")
+        lbl_p1.setFont(Theme.Fonts.caption())
+        lbl_p1.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        p1.main_layout.addWidget(lbl_p1)
+
         self.lbl_utc = QLabel(self.model.utc_time_str)
         self.lbl_utc.setFont(Theme.Fonts.metric_huge())
-        self.lbl_utc.setStyleSheet(f"color: {Theme.Colors.CYAN_NEON}; border: none;")
+        self.lbl_utc.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
         p1.main_layout.addWidget(self.lbl_utc)
 
         p2 = GlassPanel()
-        p2.main_layout.addWidget(QLabel("LOCAL STATION TIME"))
+        lbl_p2 = QLabel("LOCAL STATION TIME")
+        lbl_p2.setFont(Theme.Fonts.caption())
+        lbl_p2.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        p2.main_layout.addWidget(lbl_p2)
+
         self.lbl_local = QLabel(self.model.local_time_str)
         self.lbl_local.setFont(Theme.Fonts.metric_huge())
         self.lbl_local.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY}; border: none;")

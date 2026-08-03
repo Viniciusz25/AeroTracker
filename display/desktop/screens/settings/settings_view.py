@@ -1,7 +1,7 @@
 """
 AeroTracker Core — Settings View (MVC)
 ======================================
-View pura de configurações do cockpit.
+View pura de configurações do cockpit Airspace Companion UI.
 """
 
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
@@ -26,19 +26,30 @@ class SettingsView(QWidget):
         # Header
         self.lbl_title = QLabel(self.model.title_text)
         self.lbl_title.setFont(Theme.Fonts.title_display())
-        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.CYAN_NEON};")
+        self.lbl_title.setStyleSheet(f"color: {Theme.Colors.TEXT_PRIMARY};")
         layout.addWidget(self.lbl_title)
 
         p1 = GlassPanel()
         top1 = QHBoxLayout()
-        top1.addWidget(QLabel("UNITS SYSTEM:"))
-        top1.addWidget(QLabel(self.model.units_text))
+        lbl1 = QLabel("UNITS SYSTEM:")
+        lbl1.setFont(Theme.Fonts.body_bold())
+        lbl1.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        top1.addWidget(lbl1)
+
+        val1 = QLabel(self.model.units_text)
+        val1.setFont(Theme.Fonts.body_bold())
+        val1.setStyleSheet(f"color: {Theme.Colors.PRIMARY}; border: none;")
+        top1.addWidget(val1)
         top1.addStretch()
         p1.main_layout.addLayout(top1)
 
         p2 = GlassPanel()
         top2 = QHBoxLayout()
-        top2.addWidget(QLabel("SUBSYSTEM HEALTH STATUS:"))
+        lbl2 = QLabel("SUBSYSTEM HEALTH STATUS:")
+        lbl2.setFont(Theme.Fonts.body_bold())
+        lbl2.setStyleSheet(f"color: {Theme.Colors.TEXT_MUTED}; border: none;")
+        top2.addWidget(lbl2)
+
         top2.addWidget(AvionicsBadge("ALL ONLINE", badge_type="positive"))
         top2.addStretch()
         p2.main_layout.addLayout(top2)
